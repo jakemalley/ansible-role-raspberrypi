@@ -1,0 +1,20 @@
+---
+# defaults file for raspberrypi
+
+# Set the user / password
+raspberry_pi_user: pi
+raspberry_pi_password: $6$TcStb3ADs0Vmhl1P$HOz0afl84EFN0Ws4IFhEtgW6iFt3VbmI2u4Q6WsAy9IPeXiJRJ0vOhBPzGRNEOrR.gdI6jWe7Nmy8Ub1ZSRHY/
+raspberry_pi_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+raspberry_pi_boot_config:
+  # Set the GPU memory split value.
+  - regexp: "^#?gpu_mem"
+    line: "gpu_mem=16"
+  # Enable 1200ma USB current on newer model Pis.
+  - regexp: "^#?max_usb_current"
+    line: "max_usb_current=1"
+
+raspberry_pi_rc_local:
+  # Disable HDMI on startup (for power savings).
+  - regexp: "^/usr/bin/tvservice"
+    line: "/usr/bin/tvservice -o"

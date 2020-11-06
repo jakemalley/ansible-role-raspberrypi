@@ -1,0 +1,37 @@
+---
+name: ci
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: "jakemalley/raspberrypi"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "jakemalley/raspberrypi"
+
+      - name: set up python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: install test dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "molecule[docker,lint]"
+
+      - name: create demo ssh key
+        run: |
+          ssh-keygen -b 4096 -t rsa -C "test@localhost" -N "testing" -f ~/.ssh/id_rsa
+
+      - name: molecule test
+        run: molecule test

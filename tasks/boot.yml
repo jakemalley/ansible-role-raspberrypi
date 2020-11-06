@@ -1,0 +1,19 @@
+---
+# tasks file for raspberrypi/boot.yml
+
+- name: configure options in /boot/config.txt
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop: "{{ raspberry_pi_boot_config }}"
+
+- name: configure options in /etc/rc.local
+  lineinfile:
+    dest: /etc/rc.local
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertbefore: "^exit"
+    state: present
+  loop: "{{ raspberry_pi_rc_local }}"

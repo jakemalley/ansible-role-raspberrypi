@@ -1,0 +1,36 @@
+---
+# tasks file for raspberrypi/user.yml
+
+- name: remove default pi user
+  user:
+    name: pi
+    state: absent
+    remove: true
+  when: raspberry_pi_user != "pi"
+
+- name: remove default pi sudo rule
+  file:
+    path: /etc/sudoers.d/010_pi-nopasswd
+    state: absent
+  when: raspberry_pi_user != "pi"
+
+- name: create user {{ raspberry_pi_user }}
+  user:
+    name: "{{ raspberry_pi_user }}"
+    state: present
+    shell: /bin/bash
+    password: "{{ raspberry_pi_password }}"
+
+- name: add ssh key for {{ raspberry_pi_user }}
+  ansible.posix.authorized_key:
+    user: "{{ raspberry_pi_user }}"
+    state: present
+    key: "{{ raspberry_pi_ssh_key }}"
+
+- name: add sudo rule for user {{ raspberry_pi_user }}
+  copy:
+    dest: "/etc/sudoers.d/010_{{ raspberry_pi_user }}-nopasswd"
+    owner: root
+    group: root
+    mode: 0660
+    content: "{{ raspberry_pi_user }} ALL=(ALL) NOPASSWD: ALL\n"
