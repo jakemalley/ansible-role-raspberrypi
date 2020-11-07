@@ -20,6 +20,6 @@ provisioner:
 verifier:
   name: ansible
 lint: |
-  set -e
+  set -e && set -x
   yamllint .
   ansible-lint .

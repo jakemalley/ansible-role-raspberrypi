@@ -1,6 +1,6 @@
 ---
 name: ci
-on:
+'on':
   pull_request:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: "jakemalley/raspberrypi"
+    working-directory: "jakemalley.raspberrypi"
 
 jobs:
   test:
@@ -17,7 +17,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
         with:
-          path: "jakemalley/raspberrypi"
+          path: "jakemalley.raspberrypi"
 
       - name: set up python 3
         uses: actions/setup-python@v2
